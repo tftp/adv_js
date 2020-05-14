@@ -1,0 +1,21 @@
+<script>
+  let dateUs = prompt('Введите дату в формате ММ/ЧЧ/ГГГГ');
+  let dateUsArr = dateUs.split('/');
+  let wrong = false;
+
+  let mm = dateUsArr[0];
+  if (mm.length < 2) mm = '0' + mm;
+  if (mm < 1 || mm > 12) wrong = true;
+
+  let dd = dateUsArr[1];
+  if (dd.length < 2) dd = '0' + dd;
+  if (dd < 1 || dd > 31) wrong = true;
+
+  let yyyy = dateUsArr[2];
+  if (yyyy.length != 4) wrong = true;
+
+  if (wrong === false)
+    alert(dd + '.' + mm + '.' + yyyy);
+  else
+    alert('Format is wrong!');
+</script>
