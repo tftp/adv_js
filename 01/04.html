@@ -1,0 +1,14 @@
+<script>
+  let num = sum = avrg = 0;
+  let count = -1;
+  
+  while (!isNaN(num))  {
+    sum += num;
+    count += 1;
+    avrg = sum / count;
+    console.log('avrg =' + avrg);
+
+    num = parseInt(prompt('Введите число'));
+  } ;
+  alert('avrg =' + avrg);
+</script>
