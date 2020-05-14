@@ -1,0 +1,16 @@
+<script>
+  let vowels = 'aeiouy';
+  let count_vowels = count_consonants = 0;
+
+  let str = prompt('Введите слово');
+
+  for (let i = 0; i < str.length; i++){
+    if (vowels.includes(str[i]))
+      count_vowels += 1;
+    else
+      count_consonants +=1;
+  }
+
+  alert('Гласных = ' + count_vowels);
+  alert('Согласных = ' + count_consonants);
+</script>
