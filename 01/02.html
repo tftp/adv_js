@@ -1,0 +1,11 @@
+<script>
+  const day = Date();
+  const timestamp = Date.parse(day)/1000;
+  const klass = 20;
+  const type = 1;
+  const id_user = 1234567;
+
+  const id_16 = timestamp.toString(16) + klass.toString(16) + type.toString(16) + id_user.toString(16);
+
+  alert('id 16 = ' + id_16);
+</script>
