@@ -1,11 +1,21 @@
 <script>
   const day = Date();
   const timestamp = Date.parse(day)/1000;
-  const klass = 20;
+  const klass = 10;
   const type = 1;
-  const id_user = 1234567;
+  const id_user = 12345;
 
-  const id_16 = timestamp.toString(16) + klass.toString(16) + type.toString(16) + id_user.toString(16);
+  let klass16;
+  klass16 = klass.toString(16);
+  if (klass16.length < 2) klass16 = '0' + klass16;
+
+  let id_user16;
+  id_user16 = id_user.toString(16);
+  while (id_user16.length < 6) {
+    id_user16 = '0' + id_user16;
+  };
+
+  const id_16 = timestamp.toString(16) + klass16 + type.toString(16) + id_user16;
 
   alert('id 16 = ' + id_16);
 </script>
