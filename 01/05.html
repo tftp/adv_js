@@ -5,7 +5,8 @@
   let str = prompt('Введите слово');
 
   for (let i = 0; i < str.length; i++){
-    if (vowels.includes(str[i]))
+    if (str[i].charCodeAt() < 97 || str[i].charCodeAt() > 122) continue;
+    if (vowels.includes(str[i].toLowerCase()))
       count_vowels += 1;
     else
       count_consonants +=1;
