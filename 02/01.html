@@ -1,0 +1,12 @@
+<script>
+  let data = [1,-2,3,-4,5,-5, -10];
+
+  let processingNegativeData = function(arr) {
+    const result = arr.filter(item => item < 0);
+    const sum = result.reduce((acc, item) => acc + item);
+    const count = result.length;
+    return {sum: sum, count: count};
+  }
+
+  console.log(processingNegativeData(data));
+</script>
