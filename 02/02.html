@@ -15,7 +15,12 @@
 
   const processingStringData = function(str) {
     let arr = str.split(' ');
-    let arr2 = arr.map(item => {return {word: item, sum: sumWord(item)}});
+    let arr2 = arr.map(
+        item => ({
+          word: item,
+          sum: sumWord(item)
+        })
+      );
 
     return arr2
   };
