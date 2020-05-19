@@ -208,6 +208,7 @@
 
     ownTicket.registrationTime = nowTime;
     console.log(ticket + ' - registration success');
+    return true;
   }
 
   /**
@@ -239,9 +240,8 @@ function flightReport(flight, nowTime = new Date().getTime()) {
   if (!flight)
      throw new Error('Flight not found');
 
-  let registration = complete = true;
-  if (nowTime < flight.registrationStarts || nowTime > flight.registrationEnds)  registration = false;
-  if (nowTime < flight.registrationEnds) complete = false;
+  const registration = (nowTime > flight.registrationStarts && nowTime < flight.registrationEnds);
+  const complete = nowTime > flight.registrationEnds;
 
   const reservedSeats = flight.tickets.length;
   const registeredSeats = flight.tickets.filter(item => item.registrationTime).length
@@ -257,5 +257,6 @@ function flightReport(flight, nowTime = new Date().getTime()) {
 
   console.log(`*** Report of flight ${flightName} ***`);
   console.table(report);
+  return report;
 }
 </script>
