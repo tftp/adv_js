@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- добавим стили mocha для отображения результатов -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.css">
+    <!-- добавляем сам фреймворк mocha -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.js"></script>
+    <script>
+      // включаем режим тестирования в стиле BDD
+      mocha.setup('bdd');
+    </script>
+    <!-- добавим chai -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.js"></script>
+    <script>
+      // chai предоставляет большое количество функций. Объявим assert глобально
+      let assert = chai.assert;
+    </script>
+  </head>
+
+  <body>
+    <!-- Написать чистую функцию, которая принимает массив чисел и возвращает сумму и количество положительных элементов массива. -->
+    <script>
+    const removeSpaces = function(str){
+      return str.replace(/\s{2,}/g, ' ');
+    };
+
+    const sumWord = function(word){
+      let sum = 0;
+      for (let i = 0; i < word.length; i++){
+        sum += word[i].charCodeAt();
+      }
+      return sum;
+    };
+
+    const wordStat = function(text) {
+      if (typeof(text) != 'string' || text.length === 0)
+           throw new Error('Data is incorrect');
+
+      const str = text.replace(/\s{2,}/g, ' ');
+      if (str === ' ')
+           throw new Error('Data is incorrect');
+
+      let arr = str.split(' ');
+      let arr2 = arr.map(
+          item => ({
+            word: item,
+            code: sumWord(item)
+          })
+        );
+
+      return arr2
+    };
+    </script>
+
+    <!-- скрипт со спецификацией (describe, it...) -->
+    <script>
+      describe ("function wordStat", function() {
+        it ("The function returns Object", function() {
+          assert.isArray(wordStat('Lorem ipsum'));
+        });
+
+        it ("get data 'Loren ipsum' and return correct data", function() {
+          assert.include(wordStat('Lorem ipsum')[0],  {word: 'Lorem', code: sumWord('Lorem') });
+          assert.include(wordStat('Lorem ipsum')[1],  {word: 'ipsum', code: sumWord('ipsum') });
+        });
+
+        it ("get data 'Loren ipsum' and return array of 2 elements", function() {
+          assert.equal(wordStat('Lorem ipsum').length, 2);
+        });
+
+        //обработка ошибок почему то не работает, может я что-то не учёл?
+        it ("get data '' and return errors exeption", function() {
+          assert.ifError(wordStat(''));
+        });
+
+        it ("get incorrect data '      ' and return errors exeption", function() {
+          assert.ifError(wordStat('       '));
+        });
+
+        it ("get incorrect data 123456 and return errors exeption", function() {
+          assert.ifError(wordStat(123456));
+        });
+      });
+    </script>
+
+    <!-- элемент с id="mocha" будет содержать результаты тестов -->
+    <div id="mocha"></div>
+
+    <!-- запускаем тесты! -->
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>
