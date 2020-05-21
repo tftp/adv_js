@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- добавим стили mocha для отображения результатов -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.css">
+    <!-- добавляем сам фреймворк mocha -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.js"></script>
+    <script>
+      // включаем режим тестирования в стиле BDD
+      mocha.setup('bdd');
+    </script>
+    <!-- добавим chai -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.js"></script>
+    <script>
+      // chai предоставляет большое количество функций. Объявим assert глобально
+      let assert = chai.assert;
+    </script>
+  </head>
+
+  <body>
+    <!-- Написать чистую функцию, которая принимает массив чисел и возвращает сумму и количество положительных элементов массива. -->
+    <script>
+      const sumOfPositive = function(arr) {
+        let result = arr.filter(item => item > 0);
+        let sum = count = 0;
+        count = result.length;
+        sum = count == 0 ? 0 : result.reduce((acc, item) => acc + item);
+        return {sum: sum, count: count,};
+      }
+    </script>
+
+    <!-- скрипт со спецификацией (describe, it...) -->
+    <script>
+      describe ("sumOfPositive", function() {
+        it ("The function returns Object", function() {
+          assert.isObject(sumOfPositive([1,2,3,-1,-2]));
+        });
+
+        it ("[1,2,3] return {sum: 6, count: 3}", function() {
+          assert.include(sumOfPositive([1,2,3]), {sum: 6, count: 3});
+        });
+
+        it ("[50,10,-2,-3,-2] return {sum: 60, count: 2}", function() {
+          assert.include(sumOfPositive([50,10,-2,-3,-2]), {sum: 60, count: 2});
+        });
+
+        it ("[0,0,0] return {sum: 0, count: 0}", function() {
+          assert.include(sumOfPositive([0,0,0]), {sum: 0, count: 0});
+        });
+
+        it ("[-1,-1,-1] return {sum: 0, count: 0}", function() {
+          assert.include(sumOfPositive([-1,-1,-1]), {sum: 0, count: 0});
+        });
+
+      });
+    </script>
+
+    <!-- элемент с id="mocha" будет содержать результаты тестов -->
+    <div id="mocha"></div>
+
+    <!-- запускаем тесты! -->
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>
