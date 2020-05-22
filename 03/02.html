@@ -56,7 +56,7 @@
     <!-- скрипт со спецификацией (describe, it...) -->
     <script>
       describe ("function wordStat", function() {
-        it ("The function returns Object", function() {
+        it ("The function returns Array", function() {
           assert.isArray(wordStat('Lorem ipsum'));
         });
 
@@ -80,6 +80,20 @@
 
         it ("get incorrect data 123456 and return errors exeption", function() {
           assert.ifError(wordStat(123456));
+        });
+      });
+
+      describe ("function sumWord", function() {
+        it ("The function returns Number", function() {
+          assert.isNumber(sumWord('Lorem'));
+        });
+
+        it ("get data 'Lorem' and return correct data", function() {
+          assert.equal(sumWord('Lorem'), 511);
+        });
+
+        it ("get data 'ipsum' and return correct data", function() {
+          assert.equal(sumWord('ipsum'), 558);
         });
       });
     </script>
