@@ -27,9 +27,8 @@
 
     const sumWord = function(word){
       let sum = 0;
-      for (let i = 0; i < word.length; i++){
-        sum += word[i].charCodeAt();
-      }
+      let arr_word =  word.trim().split('');
+      sum = arr_word.reduce((acc, item) => acc + item.charCodeAt(), 0)
       return sum;
     };
 
@@ -94,6 +93,18 @@
 
         it ("get data 'ipsum' and return correct data", function() {
           assert.equal(sumWord('ipsum'), 558);
+        });
+
+        it ("get data '' and return correct data", function() {
+          assert.equal(sumWord(''), 0);
+        });
+
+        it ("get data ' ' and return correct data", function() {
+          assert.equal(sumWord(' '), 0);
+        });
+
+        it ("get data 'i' and return correct data", function() {
+          assert.equal(sumWord('i'), 105);
         });
       });
     </script>

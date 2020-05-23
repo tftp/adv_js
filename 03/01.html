@@ -24,8 +24,8 @@
       const sumOfPositive = function(arr) {
         let result = arr.filter(item => item > 0);
         let sum = count = 0;
+        sum = result.reduce((acc, item) => acc + item, count);
         count = result.length;
-        sum = count == 0 ? 0 : result.reduce((acc, item) => acc + item);
         return {sum: sum, count: count,};
       }
     </script>
