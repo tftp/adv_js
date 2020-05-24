@@ -21,12 +21,20 @@
   <body>
     <!-- Написать чистую функцию, которая принимает массив чисел и возвращает сумму и количество положительных элементов массива. -->
     <script>
+      /**
+      *@param {number[]} array
+      *@return { {sum: number, count: number} }
+      */
       const sumOfPositive = function(arr) {
-        let result = arr.filter(item => item > 0);
-        let sum = count = 0;
-        sum = result.reduce((acc, item) => acc + item, count);
-        count = result.length;
-        return {sum: sum, count: count,};
+        if (!Array.isArray(arr))
+            throw new Error ('Data is not array');
+
+        const result = arr.filter(item => item > 0);
+        const sum = result.reduce((acc, item) => acc + item, 0);
+        return {
+          sum,
+          count: result.length,
+        };
       }
     </script>
 
@@ -53,6 +61,13 @@
           assert.include(sumOfPositive([-1,-1,-1]), {sum: 0, count: 0});
         });
 
+        it ("if not correct data (Number) return Error", function() {
+          assert.ifError(sumOfPositive(123));
+        });
+
+        it ("if not correct data (String) return Error", function() {
+          assert.ifError(sumOfPositive('123'));
+        });
       });
     </script>
 
