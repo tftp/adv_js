@@ -1,4 +1,4 @@
-<script>
+
   function makeTime(hours, minutes) {
       const date = new Date();
       date.setHours(hours);
@@ -168,7 +168,7 @@
 
       console.table(flight);
       console.table(flight.tickets);
-  }
+  };
 
   /**
    * Функция пробует произвести электронную регистрацию пассажира
@@ -259,4 +259,3 @@ function flightReport(flight, nowTime = new Date().getTime()) {
   console.table(report);
   return report;
 }
-</script>
