@@ -168,6 +168,18 @@
 
       console.table(flight);
       console.table(flight.tickets);
+      div = document.getElementById("flight-details");
+      flight.tickets.forEach(item => {
+        div.append(
+          document.createTextNode(
+            " Номер билета: " + item.id +
+            "; Место: " + item.seat +
+            "; Имя пассажира: " + item.fullName +
+            "; Регистрация: " + item.registrationTime
+          ),
+        );
+        div.append(document.createElement("br"));
+      });
   };
 
   /**
