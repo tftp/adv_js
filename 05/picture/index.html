@@ -1,93 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <title>events</title>
-    <style>
-        table {
-            display: block;
-            margin: 20px auto;
-            max-width: 200px;
-        }
+  <head>
+      <meta charset="UTF-8">
+      <title>events</title>
+      <style>
+          table {
+              display: block;
+              margin: 20px auto;
+              max-width: 200px;
+          }
 
-        table tr td {
-            width: 10px;
-            height: 10px;
-            border: 1px solid gray;
-        }
-    </style>
-</head>
+          table tr td {
+              width: 10px;
+              height: 10px;
+              border: 1px solid gray;
+          }
+      </style>
+  </head>
 
-<body>
+  <body>
 
-<table cellspacing="0" cellpadding="0">
-    <tr>
-        <td data-code="hello"></td>
-        <td data-code="world"></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
+    <table cellspacing="0" cellpadding="0">
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+    </table>
+    <button id="creaCanv" >Развернуть полотно</button>
+    <table cellspacing="0" cellpadding="0">
+        <tr>
+          <td style="background-color:transparent"></td>
+          <td style="background-color:red"></td>
+          <td style="background-color:orange"></td>
+          <td style="background-color:yellow"></td>
+          <td style="background-color:green"></td>
+          <td style="background-color:blue"></td>
+          <td style="background-color:navy"></td>
+          <td style="background-color:purple"></td>
+        </tr>
+    </table>
 
 
-<script>
-    'use strict';
-    const table = document.getElementsByTagName('table')[0];
+    <script>
+        'use strict';
+        const table = document.getElementsByTagName('table')[0];
+        const palete = document.getElementsByTagName('table')[1];
+        const button = document.getElementById('creaCanv');
+        let color = "transparent";
 
-    table.addEventListener('click', click);
+        button.addEventListener('click', createCanvas);
+        table.addEventListener('mouseover', paint);
+        palete.addEventListener('click', setColor);
 
-    /**
-     * @param {MouseEvent} event
-     */
-    function click(event) {
-        console.log(event.type, event.target);
+        function setColor(event){
+          color = event.target.style.backgroundColor;
+          console.log(color);
+        };
 
-        if (event.target.tagName !== 'TD')
-            return;
+        function createCanvas(event){
+            for (let i = 0; i<5; i+=1){
+              table.append(table.children[0].cloneNode(true));
+            };
+        };
 
+        /**
+         * @param {MouseEvent} event
+         */
+        function paint(event) {
+            if (event.target.tagName !== 'TD')
+                return;
 
-        if (event.shiftKey)
-            event.target.style.backgroundColor = 'transparent';
-        else if (event.ctrlKey)
-            event.target.style.backgroundColor = 'blue';
-        else
-            event.target.style.backgroundColor = 'red';
-
-        // console.log(this);
-        // console.log(event.offsetX, event.offsetY)
-        console.log(event.target.dataset.code);
-    }
-</script>
-</body>
+            event.target.style.backgroundColor = color;
+        };
+    </script>
+  </body>
 
 </html>
