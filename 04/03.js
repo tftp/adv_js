@@ -114,8 +114,11 @@
       if (flight.tickets.length >= flight.seats)
           throw new Error('No seats available');
 
+      if (fullName.trim() < 3)
+          throw new Error('Name is wrong');
+
       if (buyTime > flight.registrationEnds)
-          throw new Error('Time away');
+         throw new Error('Time away');
 
       const seat = findAvailableSeat(flight, type);
       if (!seat)
