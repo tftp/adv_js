@@ -1,0 +1,145 @@
+обработка сообытий происходит несколькими способами:
+к примеру есть кнопка
+
+    <button id="btn">Click me</button>
+
+есть функция
+
+    function toggle(event) {
+        console.log(event.target);
+        if (btn.textContent === 'Thanks')
+            btn.textContent = 'Click me again';
+        else
+            btn.textContent = 'Thanks';
+    }
+
+тогда обрабатывать событие нажатия на кнопку можно:
+1)
+      const btn = document.getElementById('btn');
+      btn.onclik = toggle;
+
+    этот способ неудобен потому что если нужно будет на это же событие назначить другую
+    функцию то произойдет переназначение, например
+
+      btn.onclik = () => alert('hi');
+      btn.onclik = toggle;
+
+2)использовать обработчик событий:
+
+      const btn = document.getElementById('btn');
+      с;
+      btn.addEventListener('click', () => alert('hi'));
+
+    здесь можно вешать несколько событий и они не будут мешать друг другу.
+
+3)назначить событие внутри кнопки:
+
+  <button id="btn" onclick="alert('hi')">Click me</button>
+
+но функция уже должна быть определена, и данный способ не сегда корректно работает.
+
+События проходят на погружение и на всплытие. Если мы хотим чтобы событие сработало
+при погружении, то указываем опцию true:
+
+    btn.addEventListener('click', toggle, true);
+
+можно удалять обработчики:
+
+    btn.removeEventListener('click', toggle);
+
+У события event есть множество опций, которые можно посмотреть через консоль.
+Среди них есть event.target - указывает на элемент запуска события, и
+          есть event.this - указывает на элемент который обрабатывает событие.
+Например если есть таблица к которой поставлен обработчик
+
+    const table = document.getElementsByTagName('table')[0];
+    table.addEventListener('click', click);
+
+и есть функция обработки клика
+
+    function click(event) {
+      event.target.style.backgroundColor = 'red';
+    }
+
+то target у нас будет ячейка таблицы на которую мы кликаем и меняем её цвет.
+
+Можно на каждый элемент <td> повесить data аттрибут и при клике на таблицу его обрабатывать,
+например выводить:
+
+    <td data-code="hello"></td>
+    <td data-code="world"></td>
+
+    function click(event) {
+    console.log(event.target.dataset.code);
+    }
+
+У события event есть множество событий, среди них:
+
+  altKey - клавиша Alt,
+  shiftKey - клавиша Shift,
+  ctrlKey - клавиша Ctrl,
+  metaKey - клавиша Win
+
+Используем если клавиша не нажата то закрашиваем ячейку в красный, если нажата,
+то закрашиваем в прозрачный:
+
+    if (event.shiftKey)
+      event.target.style.backgroundColor = 'transparent';
+    else
+      event.target.style.backgroundColor = 'red';
+
+Иногда на событие нужно ставить фильтр, чтобы функция выполнялась над тем элементом,
+который нам нужен:
+
+    if (event.target.tagName !== 'TD')
+      return;
+
+Обработка формы.
+При обработке форма также создаем обработчик событий:
+
+    form = document.getElementById('formId');
+    form.addEventListener('submit', submitHundler);
+
+а внутри функции обработки формы добавляем:
+
+    event.preventDefault();    #прерывает обработку по умолчанию
+
+чтобы форма не отправляла данные и страница не перегружалась.
+Далее мы можем снять данные с формы примерно так:
+
+    const data = {
+      ticket: form.elements.name_of_element.value
+    }
+
+Обработчик клавиатуры:
+Возьмем наш элемент который хотим обрабатывать, например:
+
+    const input = getElementsByTagName('input');
+
+на него можно повесить три клавиатурных события
+
+    input.addEventListener('keydown', handler);   # опускание клавиши
+    input.addEventListener('keypress', handler);  # нажатие клавиши
+    input.addEventListener('keyup', handler);     # поднятие клавиши
+
+события keypress и keydown похожи, но keypress не может обаботать некоторые клавиши,
+например Shift.
+
+Пример обработки нажатия Ctrl+S:
+
+    if(event.code == 'KeyS' && event.ctrlKey) {
+        even.preventDefault();
+        alert('saving it');
+    };
+
+Таким образом можно настроить фильтрацию на ввод только цифр например:
+определим массив цифр
+
+    const validKeys = ['0','1', '2', '3', '4']
+
+и обработка соответственно:
+
+      if(validKeys.includes(event.key)){
+          event.preventDefault();
+          event.stopPropagation();
+      }

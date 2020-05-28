@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Form for buy ticket</title>
+    <script src="../../04/03.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <h2>Покупка билета</h2>
+    <p>Для покупки билета необходимо заполнить поля формы</p>
+    <div class="forms-error" style="background-color:red"></div>
+    <!-- flightName, buyTime, fullName -->
+    <form id="form_buy_ticket">
+        <fieldset>
+          <label for="flightName">Номер рейса:</label> <br>
+          <input type="text" name="flightName" value=""> <br>
+          <label for="fullName">Полное имя пассажира:</label> <br>
+          <input type="text" name="fullName" value=""> <br>
+          <label for="typeOfSeat">Тип места:</label>
+          <select name="typeOfSeat">
+            <option value=0>Стандарт</option>
+            <option value=1>VIP</option>
+          </select>
+          <p>
+            <button type="submit" name="button">Отправить</button>
+          </p>
+        </fieldset>
+        <div class="forms-success" style="background-color:yellow"></div>
+    </form>
+    <script type="text/javascript">
+      form = document.getElementById('form_buy_ticket');
+      form.addEventListener('submit', submitHundler);
+      formsError = document.getElementsByClassName('forms-error');
+      formsSuccess = document.getElementsByClassName('forms-success');
+
+      function submitHundler(event) {
+        event.preventDefault();
+
+        const data = {
+          flightName: form.elements.flightName.value,
+          buyTime: new Date().getTime(),
+          fullName: form.elements.fullName.value,
+          type: +form.elements.typeOfSeat.value,
+        };
+
+        try {
+          result = buyTicket(data.flightName, data.buyTime, data.fullName, data.type);
+        } catch(error) {
+          formsError[0].innerHTML = error.message;
+          return;
+        };
+
+        formsError[0].innerHTML = "";
+        formsSuccess[0].innerHTML = `Билет успешно создан<br>
+                                    Номер билета: ${result.id}<br>
+                                    Номер рейса: ${result.flight}<br>
+                                    Имя пассажира: ${result.fullName}<br>
+                                    Место: ${result.seat}`;
+        clearForm();
+      };
+
+      function clearForm(){
+        form.elements.flightName.value = '';
+        form.elements.fullName.value = '';
+      };
+    </script>
+  </body>
+</html>
