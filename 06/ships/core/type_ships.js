@@ -13,7 +13,7 @@ function MotorShip () {
   let _bodyMaterial = 'steel';
 
   this.setEnginePower = function(power){
-    if (typeof(power) != 'number' && power <= 0)
+    if (typeof(power) != 'number' || power <= 0)
         throw new Error('Power must be positive number!');
     _enginePower = power;
     return _enginePower;
@@ -48,7 +48,7 @@ function SailShip () {
   let _areaSail = 10;
 
   this.setMast = function(quantity){
-    if (typeof(quantity) != 'number' && quantity <= 0)
+    if (typeof(quantity) != 'number' || quantity <= 0)
         throw new Error('Quantity must be positive number!');
     _mast = quantity;
     return _mast;
@@ -59,7 +59,7 @@ function SailShip () {
   };
 
   this.setAreaSail = function(number){
-    if (typeof(material) != 'number' && number <= 0)
+    if (typeof(number) != 'number' || number <= 0)
         throw new Error('Number must be positive number');
     _areaSail = number;
     return _areaSail;

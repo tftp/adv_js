@@ -8,34 +8,32 @@ function Shipyard () {
   };
 
   this.repair = function(object){
-    if (typeof(object) != 'object')
-      throw new Error('argument must be Object');
+    validateObject(object, this);
 
-    if (!object.model)
-      throw new Error('Object must have model attribute');
-
-    if (object.model !== this.typeShipyard)
-      throw new Error(`Ship must have type ${this.typeShipyard}` );
+    return true;
   };
 
   this.paint = function(object){
-    if (typeof(object) != 'object')
-      throw new Error('argument must be Object');
+    validateObject(object, this);
 
-    return console.log(`${object.name} is paint`)
+    return true;
   };
 
   this.change = function(object){
+    validateObject(object, this);
+
+    return this.create();
+  };
+
+  function validateObject(object, shipyard){
     if (typeof(object) != 'object')
       throw new Error('argument must be Object');
 
     if (!object.model)
       throw new Error('Object must have model attribute');
 
-    if (object.model !== this.typeShipyard)
-      throw new Error(`Ship must have type ${this.typeShipyard}` );
-
-    return this.create();
+    if (object.model !== shipyard.typeShipyard)
+      throw new Error(`Ship must have type ${shipyard.typeShipyard}` );
   };
 };
 
