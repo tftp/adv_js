@@ -8,7 +8,7 @@
  * @property {object <{number} x, {number} y>} position
  */
 
-function Ship(name, model, position) {
+function Ship(name, model, position = {x: 0, y: 0}) {
     let _isAnchorDroped = false;
     let _distance = 0;
 
@@ -27,6 +27,12 @@ function Ship(name, model, position) {
     this.name = name;
     this.model = model;
     this.position = position;
+
+    if (this.model === 'motor')
+        Object.setPrototypeOf(this, new MotorShip);
+
+    if (this.model === 'sail')
+        Object.setPrototypeOf(this, new SailShip);
 
     /**
     * @property {object <{number} x, {number} y>} position
@@ -105,5 +111,3 @@ function Ship(name, model, position) {
       return true;
     };
 };
-
-const ship = new Ship('ba','A', {x: 11, y: 0})
