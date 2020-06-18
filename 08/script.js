@@ -83,10 +83,10 @@ class Input extends HtmlElement{
     if (typeof(value) != 'function')
       throw new Error('It is not a function!')
 
-    if (!this._target)
-      throw new Error('Target is not set!')
+    if (!this._newDom)
+      throw new Error('INPUT element is not yet rendering now!')
 
-    this._target.addEventListener('input', value)
+    this._newDom.addEventListener('input', value)
   }
 
   // onFocus, принимает функцию
@@ -94,10 +94,10 @@ class Input extends HtmlElement{
     if (typeof(value) != 'function')
       throw new Error('It is not a function!')
 
-    if (!this._target)
-      throw new Error('Target is not set!')
+    if (!this._newDom)
+      throw new Error('INPUT element is not yet rendering now!')
 
-    this._target.addEventListener('focus', value)
+    this._newDom.addEventListener('focus', value)
 
   }
 }
@@ -108,9 +108,9 @@ class Div extends HtmlElement{
     if (typeof(value) != 'function')
       throw new Error('It is not a function!')
 
-    if (!this._target)
-      throw new Error('Target is not set!')
+    if (!this._newDom)
+      throw new Error('DIV element is not yet rendering now!')
 
-    this._target.addEventListener('click', value)
+    this._newDom.addEventListener('click', value)
   }
 };
