@@ -10,17 +10,29 @@ class HtmlElement {
   // _target - текущий DOM element в который будет произведена отрисовка
   // _render - Метод для отрисовки объекта
   _render(value){
-    let newDom;
-    this._template.includes('div') ? newDom = document.createElement('DIV') : newDom = document.createElement('INPUT');
-    let style = renderStyle(this._style);
-    let context = this._template.replace('<div>','').replace('</div>','');
-    for(const [key, value] of Object.entries(this._variables)){
-      context = context.replace(key, value);
-    }
+    if (!value)
+      return this._newDom.remove()
 
-      //this._target.addEventListener('click', this.onClick())
+    if (!this._template)
+      throw new Error('Template not set!')
+
+    if (!this._target)
+      throw new Error('Parrent node not set!')
+
+    if (this._newDom)
+      this._newDom.remove()
+
+    this._template.includes('div') ? this._newDom = document.createElement('DIV') : this._newDom = document.createElement('INPUT');
+    let context = this._template.replace('<div>','').replace('</div>','');
+    if (this._variables)
+      for(const [key, value] of Object.entries(this._variables)){
+        context = context.replace(`{${key}}`, value);
+      }
+    this._newDom.style.cssText = this._style;
+    this._newDom.innerText = context;
+    this._target.append(this._newDom)
   }
-  // _unrender - удаляет созданный DOM element со страницы
+
   // setter template - задает шаблон в виде строки, механизм замены можно использовать любой, но очень желательно не использовать дата атрибуты
   set template(value){
       this._template = value
@@ -48,7 +60,9 @@ class HtmlElement {
     if (typeof(value) != 'object')
       throw new Error('It must be object')
 
-    this._style = value
+    this._style = renderStyle(value);
+    if (this._newDom)
+      this._newDom.style.cssText = this._style
   }
 
   // render() - вызывает _render
@@ -56,6 +70,7 @@ class HtmlElement {
     this._render(true)
   }
 
+  // _unrender - удаляет созданный DOM element со страницы
   // unrender() - вызывает _render
   unrender(){
     this._render(false)
