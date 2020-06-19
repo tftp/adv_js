@@ -143,3 +143,8 @@
           event.preventDefault();
           event.stopPropagation();
       }
+
+Пример, при клике на объекте страницы этот объект выводится в консоль:
+  html = document.documentElement;
+  function tar(){console.log(event.target)};
+  html.addEventListener('click',tar);
