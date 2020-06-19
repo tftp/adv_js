@@ -1,10 +1,6 @@
-const CustomPromise = function (callback){
-  this.__success__ = [];
-  this.__error__ = [];
-  this._callback = callback;
-  this._status = 'pending';
+class CustomPromise {
 
-  this.then = function (successCb, rejectCb){
+  then(successCb, rejectCb){
     if(successCb) {
       this.__success__.push(successCb)
     }
@@ -21,11 +17,11 @@ const CustomPromise = function (callback){
       this.__error__[this.__error__.length - 1](this._resultError)
   }
 
-  this.catch = function (rejectCb){
+  catch(rejectCb){
     this.then (null, rejectCb)
   }
 
-  this._resolve = function (result){
+  _resolve(result){
     if(!this._resultResolve)
       this._resultResolve = result
 
@@ -34,7 +30,7 @@ const CustomPromise = function (callback){
       this._status = 'fulfilled'
   }
 
-  this._reject = function (error){
+  _reject(error){
     if(!this._resultError)
       this._resultError = error
 
@@ -43,7 +39,32 @@ const CustomPromise = function (callback){
       this._status = 'rejected'
   }
 
-  setTimeout( () => {
-    callback(this._resolve.bind(this), this._reject.bind(this))
-  }, 0);
+  constructor (callback) {
+    this.__success__ = [];
+    this.__error__ = [];
+    this._callback = callback;
+    this._status = 'pending';
+
+    setTimeout( () => {
+      callback(this._resolve.bind(this), this._reject.bind(this))
+    }, 0);
+
+  }
+
+  static resolve = function(result){
+    let newPromis =  new CustomPromise(resolve => resolve(result))
+    newPromis._status = 'fulfilled'
+    newPromis._resultResolve = result
+    newPromis.__success__.push(() => {})
+    return newPromis
+  }
+
+  static reject = function(result){
+    let newPromis =  new CustomPromise(reject => reject(result))
+    newPromis._status = 'rejected'
+    newPromis._resultError = result
+    newPromis.__error__.push(() => {})
+    return newPromis
+  }
+
 };
