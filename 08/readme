@@ -1,0 +1,136 @@
+Классы - более удобный способ создания объектов.
+  class SomeClass {
+    constructor(){}
+    someMethod()1{}
+    someMethod2(){}
+    somePropety='value'
+  }
+
+  Конструктор - обычная функция конструктор для создания объекта.
+  Пример:
+  class Cat {
+    constructor(name){
+      this.name = name
+    }
+    eat(){
+      console.log(`${this.name} eat`)
+    }
+  }
+
+  и создаем кота var cat = new Cat('Peter')
+
+  В данном случае метод eat() у объекта буде находится в прототипе.
+
+  Также у объекта будет указан в прототипе конструктор class Cat а не просто Cat.
+
+  Если есть какие то свойства которые не меняются, то их добавляют не внутрь constructor,
+  а вне:
+  class Cat {
+    kind = 'cats'
+    constructor(name){
+      this.name = name
+    }
+    eat(){
+      console.log(`${this.name} eat`)
+    }
+  }
+
+В  данном случае kind = 'cats' это свойство объекта. Такой метод задания свойств объекта может
+ не поддерживаться в старых браузерах.
+Получается что функции сохраняются в прототипе а свойства в инстансе.
+
+Различия использования классов и простого создания объекта:
+  Методы созданые в классе не перечисляемые, т.е. их нельзя перечислить у объектов с помощью иттератора.
+  Класс не может быть вызван без new.
+  Код внутри класса всегда находится в строгом режиме.
+
+Статические методы - это методы класса.
+  Создаются с помощью ключевого слова static:
+    class Cat {
+      static kind = 'cats'
+      constructor(name){
+        this.name = name
+      }
+      static eat(){
+        console.log(`${this.name} eat`)
+      }
+    }
+
+  Теперь при можно обращаться к свойству класса Cat.kind или методу Cat.eat()
+  А созданный объект не будет иметь этого свойства и метода.
+
+Наследование в классе.
+  С помощью ключевого слова extends:
+    class Cat extends Animal{
+      constructor(name){
+        super()
+        this.name = name
+        this.kind = 'cats'
+      }
+    }
+    class Animal{
+      eat(){
+        console.log(`${this.name} eat`)
+      }
+    }
+
+  super() - позволяет создать this на уровне родителя, т.е. сам класс, если он имеет родителя не создает
+  this окружение, а передает это право родителю.
+  Через super также передается параметр в родитель если в родительском классе есть конструктор:
+    class Cat extends Animal{
+      constructor(name){
+        super(123)
+        this.name = name
+        this.kind = 'cats'
+      }
+    }
+    class Animal{
+      constructor(number){
+      this.number = number
+      }
+      eat(){
+        console.log(`${this.name} eat`)
+      }
+    }
+
+Можно добавлять свойства в прототип: Animal.prototype.test = 123
+
+В родителе также можно использовать статические методы:
+  class Animal{
+    constructor(number){
+    this.number = number
+    }
+    eat(){
+      console.log(`${this.name} eat`)
+    }
+    static getAnimals(){
+    return ['cats', 'dogs', 'horses']
+    }
+  }
+  class Cat extends Animal{
+    constructor(name){
+      super(123)
+      this.name = name
+      this.kind = 'cats'
+      this.available = Animal.getAnimals()
+    }
+  }
+
+Геттеры и сеттеры в классах.
+  class SomeClass{
+    constructor(){}
+    get propety(){...}
+    set propety(){...}
+  }
+
+  пример:
+  class Clock {
+    get currentTime(){
+      return new Date()
+    }
+    set currentTime(value){
+      console.log('You have not access to time!')
+    }
+  }
+
+Приватные методы и свойства в js пока реализованы слабо и практически не используются.
