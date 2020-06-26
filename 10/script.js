@@ -9,12 +9,11 @@ function getGifs(query, cache = new Set){
   cacheResponse = cache;
   return cacheResponse[query] ? cacheResponse[query] : fetch(`https://api.giphy.com/v1/gifs/search?q=${query}&api_key=${API_KEY}`)
     .then(result => {
-    if(result.ok){
-      //timeRequest = new Date().getTime();
-      return result.json();
-    }
-    throw new Error('Something wrong!')
-  })
+      if(result.ok){
+        return result.json();
+      }
+      throw new Error('Something wrong!')
+    })
 }
 
 const searchGifs = async (query) => {
