@@ -1,34 +1,43 @@
 API_KEY = "84wP281xkdA9Yr4VF7g2C5RARhdjcoRK";
 
 const input = document.querySelector('#gifs-search')
-input.addEventListener('input', (event) =>{ searchGifs(event.target.value) })
-let flag;
+input.addEventListener('input', (event) =>{ throtSearchGifs(event.target.value) })
 let cache = new Set();
 
-function getGifs(query, cache = new Set){
+async function getGifs(query, cache = new Set){
   cacheResponse = cache;
-  return cacheResponse[query] ? cacheResponse[query] : fetch(`https://api.giphy.com/v1/gifs/search?q=${query}&api_key=${API_KEY}`)
-    .then(result => {
-      if(result.ok){
-        return result.json();
-      }
-      throw new Error('Something wrong!')
-    })
+  if (cacheResponse[query]){
+    return cacheResponse[query]
+  }
+  const result = await fetch(`https://api.giphy.com/v1/gifs/search?q=${query}&api_key=${API_KEY}`);
+  if(result.ok){
+    return await result.json();
+  }
+  throw new Error('Something wrong!')
 }
 
-const searchGifs = async (query) => {
-  if(flag){
-    setTimeout(() => { flag = false; }, 500);
-    return;
-  };
+const searchGifs =   async (query) => {
   try {
-    const result = await getGifs(query)
+    const result =   await getGifs(query, cache);
     if (result){
       console.log(query, cache, result)
-      flag = true;
+//      flag = true;
       cache[query] = result;
     }
   }catch(err){
     console.error(err)
   };
 };
+
+let throtSearchGifs = throt(searchGifs, 500);
+
+function throt(func, time){
+  return function(query){
+    let lastTime = this.currentTime;
+    this.currentTime = new Date().getTime();
+    if(lastTime && (this.currentTime - lastTime) < time){
+      return;
+    };
+    func(query);
+  }
+}
