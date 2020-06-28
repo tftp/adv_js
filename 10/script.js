@@ -21,7 +21,6 @@ const searchGifs =   async (query) => {
     const result =   await getGifs(query, cache);
     if (result){
       console.log(query, cache, result)
-//      flag = true;
       cache[query] = result;
     }
   }catch(err){
