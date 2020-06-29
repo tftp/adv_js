@@ -23,12 +23,6 @@ class User {
   }
 }
 
-// function renderAnswer(message){
-//   answer = ;
-//   answer.push(message);
-//   return answer;
-// }
-
 wsConnection.on("connection", ws => {
   const user = new User(ws);
   clients.add(user);
