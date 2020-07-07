@@ -10,6 +10,10 @@ class User {
     this.name = 'User' + new Date().getTime();
   }
 
+  sendMessage(message) {
+    this.connection.send(message);
+  }
+
   loginChannel(channelName) {
     this._channels.add (channelName);
   }
@@ -24,22 +28,20 @@ class User {
 }
 
 wsConnection.on("connection", ws => {
-  const user = new User(ws);
-  clients.add(user);
+    const user = new User(ws);
+    clients.add(user);
 
-  user.connection.on("message", function(data) {
-//    const message = JSON.parse(data);             //такая конструкция не работает
-    let message = JSON.parse(JSON.stringify(data)); //data имеют вид строки socket.send('{"command" : "login"}')
-    message = JSON.parse(message);
+    user.connection.on("message", function(data) {
+    let message = JSON.parse(data);
 
     switch (message.command) {
       case "login":
         if(!message.channel){
-          user.connection.send('Not set channel!');
+          user.sendMessage('Not set channel!');
           return;
         }
         if(user._channels.size >= 2){
-          user.connection.send('You have max number of channels!');
+          user.sendMessage('You have max number of channels!');
           return;
         }
         user.loginChannel(message.channel);
@@ -48,56 +50,56 @@ wsConnection.on("connection", ws => {
         };
         clients.forEach( client => {
             if(client.isLoggedIn(message.channel)) {
-              client.connection.send( `[${message.channel}]: ${user.name} is logged in [${message.channel}]`)
+              client.sendMessage( `[${message.channel}]: ${user.name} is logged in [${message.channel}]`)
             }
         })
         return;
       case "logout":
         if(!message.channel){
-          user.connection.send('Not set channel!');
+          user.sendMessage('Not set channel!');
           return;
         }
         if(user.isLoggedIn(message.channel)) {
           user._channels.delete(message.channel);
-          user.connection.send( `You are logout from channel [${message.channel}]`)
+          user.sendMessage( `You are logout from channel [${message.channel}]`)
           clients.forEach( client => {
               if(client.isLoggedIn(message.channel)) {
-                client.connection.send( `[${message.channel}]: ${user.name} is logout from [${message.channel}]`)
+                client.sendMessage( `[${message.channel}]: ${user.name} is logout from [${message.channel}]`)
               }
           })
         }
         return;
       case "sendMessage":
         if(!message.channel){
-          user.connection.send('Not set channel!');
+          user.sendMessage('Not set channel!');
           return;
         }
         if(!user._channels.has(message.channel)){
-          user.connection.send(`You must login to channel [${message.channel}] before send message!`);
+          user.sendMessage(`You must login to channel [${message.channel}] before send message!`);
           return;
         }
         if(message.message){
           clients.forEach( client => {
               if(client.isLoggedIn(message.channel)) {
-                client.connection.send( `[${message.channel}]:[${user.name}]: ${message.message}`)
+                client.sendMessage( `[${message.channel}]:[${user.name}]: ${message.message}`)
               }
           });
         };
         return;
       case "exitChat":
-        user.connection.send('You exit from chat');
+        user.sendMessage('You exit from chat');
         user.connection.close();
         clients.forEach( client => {
             user._channels.forEach((channel) => {
               if(client.isLoggedIn(channel)) {
-                client.connection.send( `[${channel}]: ${user.name} is exit from chat`)
+                client.sendMessage( `[${channel}]: ${user.name} is exit from chat`)
               }
             });
         });
         clients.delete(user);
         return;
       default:
-        user.connection.send(`Unknown command ${message.command}`);
+        user.sendMessage(`Unknown command ${message.command}`);
         return;
     }
   });
@@ -105,5 +107,4 @@ wsConnection.on("connection", ws => {
   user.connection.on("close", function() {
     clients.delete(user);
   });
-
 });
