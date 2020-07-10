@@ -1,0 +1,157 @@
+DOM - Document Object Model
+HTML появился из XML и отличается тем что может допускать ошибки.
+
+Поиск в DOM дереве:
+  getElementById ищет по аттрибуту id
+  getElementByName - ищет по названию аттрибута
+  getElementByTagName - по названию тэга
+  getElementByClassName - по аттрибуту class
+  querySelector позволяет искать по целому запросу
+  querySelectorAll - также
+  Элемент - Noda - имеет ссылки на родительскую Ноду(parentNode), на дочерние элементы (firstChild, childNodes, lastChild)
+   и соседнюю(братскую) ноду(previousSibling, nextSibling).
+Noda может содержать функциональные элементы, тогда обращение к ним будет:
+  - к родительскому: parentElement
+  - к детям: children, firstElementChild, lastElementChild
+  - к братьям: previousElementSibling, nextElementSibling
+
+Функции изменения DOM:
+  Создание:
+    document.createElement(tag)
+    document.createTextNode(text)
+    cloneNode(boolean)
+
+  Вставка элемента:
+    append
+    prepend
+    before
+    after
+    replaceWith
+    remove
+
+Прежде чем вставить элемент его надо создать.
+
+Получаем элемент по id:
+  list = document.getElementById('list')
+
+Далее получаем псевдо массив из его элементов:
+  arr = list.children
+
+Можем превратить его в обычный массив командой:
+  Array.from(arr)
+
+Чтобы увидеть что есть внутри полученого элемента list используем:
+  list.innerHTML
+
+Список элементов - это псевдомассив или HTML коллекция.
+Чтобы пройти по всем элементам коллекции надо:
+    Array.from(list.children).forEach(console.log)
+или
+    items = Array.from(list.children)
+    item.forEach((item) => item.style.backgroundColor='blue')
+
+    backgroundColor - это свойство стиля background-color только написано в кэмалкейсе
+    любое свойство стиля можно так написать.
+
+Сохраним первый элемент:
+  item = list.firstElementChild
+Чтобы получить следующий элемент:
+  item = item.nextElementSibling
+
+Таким обраом можно пройти по всем элементам, если далее элемента нет то вернется null
+
+Если мы пойдем по Нодам то будем идти более подробно: Элемент - текс внутри него - текст после него - комментарий если есть и т.д.
+У Ноды доступно list.nodeName и list.nodeType.
+
+Ноды - это 100% описание всего документа;
+Элементы - это упрощенное описание.
+
+Создание:
+  newItem =  document.createElement('hr')
+  в дом дереве его ещё нет.
+Добавление:
+  list.append(newItem)
+Добавление после элемента:
+  list.after(list.children[3], newItem
+
+Функция создания списка элементов, принимает массив строк:
+  function createList(list){
+    const ul = document.createElement('ul');
+    ul.id = 'list' //меняем аттрибут в элементе
+
+    list.forEach( item => {
+      const li = document.createElement('li');
+      ul.append(li);
+
+      const text = document.createTextNode(item); // можно использовать innerText
+      li.append(text);                            //вместо этого li.innerText = item;
+    })
+
+    return ul;
+  }
+
+  Lifehack для консоли - выбираем элемент мышкой - теперь в консоле он доступен под $0,
+    $('li') - вернет первый элемент li; другие возможности консоли смотри в допМатериалах.
+
+Клонирование
+
+  copy = list.children[0].cloneNode(true) - true означает что мы копируем Ноду со всеми внутренними элементами
+
+  Теперь можем менять содержимое независимо от всего остального:
+    copy.innerText = 'Welcome'
+
+  Таким образом можно создавать шаблоны элементов и применять их когда нужно
+    <template id='template'>
+      <div>
+        <div class='name'> Ivanov </div>
+      </div>
+    </template>
+    <div id="container"></div>
+
+    Возьмем контейнер:
+      const template = document.getElementById('template');
+
+    Клонируем контейнер:
+      const copy = template.content.cloneNode(true); // content - содержимое template, хранится как документ-фрагмент
+      copy.querySelector('name').innerText = 'Petrov'; //меняем содержимое первого попавшегося элемента класса name
+      const container = document.getElementById('container');
+      container.append(copy);
+
+    Вот две функции, одна удаляет(но запоминает), другая возвращает Дом элемент:
+      let saved = null;
+      function remove(){
+        saved = container.firstElementChild;
+        container.firstElementChild.remove();
+      }
+
+      function revert(){
+        container.append(saved);
+      }
+
+      Скрытие элемента:
+        function toggleHidden(){
+          container.hidden = !container.hidden;
+        }
+
+У каждой ноды есть специальные значения nodeValue и data (у input например это само его значение)
+У Нод есть свойства nodeType nodeName, у элементов tagName
+className и classList :
+  чтобы обратится к классу элемента мы не можем написать $0.class, нужно $0.className,
+  но если класса два, то нам вернется "first second". И тут нам поможет свойство $0.classList
+  которое вернет псевдомассив классов. Можно просто добавить ещё класс: $0.classList.add('threed')
+  или удалить $0.remove('second'). Ещё очень удобная команда $0.classList.toggle('first'), которая удаляет есди элемент есть
+  или добавляет если элемента нет.
+
+$0.attributes - массив всех аттрибутов
+
+Если аттрибут не по стандарту то нужно добавлять их не asd="asd" - это не правильно,
+а правильно data-asd="asd", тогда можно к ним обатиться через $0.dataset ('это объект наших data элементов'),
+обращение $0.dataset.asd = "asd" или создать новый $0.dataset.hi="dsa"
+
+Для проверки аттрибутов используются следующие свойства:
+  attributes
+  hasAttribute
+  getAttribute
+  removeAttrebute
+
+    
